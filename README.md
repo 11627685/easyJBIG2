@@ -75,62 +75,20 @@ an easy JBIG2 file web show
    
    当然你可以把处理的文件直接存为BMP图片格式文件，利用image元素来进行展示，伪代码如下：  
    ```html
+ 
+<script>
+         ctx.putImageData(imageData, 0, 0);
 
-  <script>
-// 获取二进制数据，假设为Uint8Array类型的data
-var data = new Uint8Array([...]);
+         const dataURL = canvas.toDataURL("image/png");
 
-// 定义BMP文件头
-var fileHeaderSize = 14;
-var infoHeaderSize = 40;
-var fileSize = fileHeaderSize + infoHeaderSize + data.length;
-var width = 100;  // BMP图像宽度
-var height = 100;  // BMP图像高度
+         // 创建Image对象
+         var img = new Image();
 
-// 创建一个Uint8Array来保存BMP文件内容
-var bmpData = new Uint8Array(fileSize);
+         // 为Image对象设置src为blob URL
+         img.src =dataURL;
+</script>
 
-// 设置文件类型标识 "BM"
-bmpData.set([0x42, 0x4D], 0);
-
-// 设置文件大小
-bmpData.set(new Uint8Array([fileSize & 0xFF, (fileSize >> 8) & 0xFF, (fileSize >> 16) & 0xFF, (fileSize >> 24) & 0xFF]), 2);
-
-// 设置保留字段（设置为0）
-bmpData.set([0, 0, 0, 0], 6);
-
-// 设置文件内容的偏移量（从文件头开始）
-var offset = fileHeaderSize + infoHeaderSize;
-bmpData.set(new Uint8Array([offset & 0xFF, (offset >> 8) & 0xFF, (offset >> 16) & 0xFF, (offset >> 24) & 0xFF]), 10);
-
-// 设置信息头大小
-bmpData.set(new Uint8Array([infoHeaderSize & 0xFF, (infoHeaderSize >> 8) & 0xFF, (infoHeaderSize >> 16) & 0xFF, (infoHeaderSize >> 24) & 0xFF]), 14);
-
-// 设置图像宽度和高度
-bmpData.set(new Uint8Array([width & 0xFF, (width >> 8) & 0xFF, (width >> 16) & 0xFF, (width >> 24) & 0xFF]), 18);
-bmpData.set(new Uint8Array([height & 0xFF, (height >> 8) & 0xFF, (height >> 16) & 0xFF, (height >> 24) & 0xFF]), 22);
-
-// 设置图像颜色面数（设置为1）
-bmpData.set(new Uint8Array([1, 0]), 28);
-
-// 设置每个像素的比特数（设置为8，灰度图像）
-bmpData.set(new Uint8Array([8, 0]), 30);
-
-// 将二进制图像数据追加到BMP数据中
-bmpData.set(data, offset);
-
-// 创建Blob对象
-var blob = new Blob([bmpData], { type: 'image/bmp' });
-
- // 创建Image对象
-var img = new Image();
-
-// 为Image对象设置src为blob URL
-img.src = URL.createObjectURL(blob);
-
-// 将Image对象添加到网页中的某个元素
-document.getElementById("image-container").appendChild(img);
- </script>
+ 
    ```
 # 四、结果展示
   ![image](https://github.com/11627685/easyJBIG2show/blob/main/easyJBIG2.png)
