@@ -132,6 +132,5 @@ document.getElementById("image-container").appendChild(img);
  </script>
    ```
 # 四、结果展示
-
-  ！[图片名称](https://github.com/11627685/easyJBIG2show/blob/main/easyJBIG2.png)
+  ![image](https://github.com/11627685/easyJBIG2show/blob/main/easyJBIG2.png)
 
