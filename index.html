@@ -8,10 +8,7 @@
             var files = event.target.files; // 获取选择的文件数组
             var file = files[0]; // 获取第一个文件
             var reader = new FileReader();
-            // 执行你想要的处理操作
-            console.log("选择的文件名: " + file.name);
-            console.log("文件类型: " + file.type);
-            console.log("文件大小: " + file.size + " bytes");
+            
 
             reader.onload = function (e) {
                 var arrayBuffer = e.target.result;
@@ -25,7 +22,7 @@
                 canvas.width = jbig2.width;
                 canvas.height = jbig2.height;
                 var ctx = canvas.getContext('2d');
-                
+
                 var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                 var data1 = imageData.data;
 
@@ -58,7 +55,7 @@
 </body>
 
  
-<script src="jbig2.js"></script>
+<script src="eaysjbig2.js"></script>
 
 
 </html>
