@@ -1,6 +1,7 @@
 
 # easyJBIG2show
-an easy JBIG2 file web show
+an easy JBIG2 file web show  
+[csdn地址](https://blog.csdn.net/likewindy/article/details/131740937)
 
 # 一、背景
   
@@ -133,4 +134,5 @@ document.getElementById("image-container").appendChild(img);
    ```
 # 四、结果展示
   ![image](https://github.com/11627685/easyJBIG2show/blob/main/easyJBIG2.png)
+   ![image](https://img-blog.csdnimg.cn/a4223792c9994904a9d57624c6460380.png)
 
