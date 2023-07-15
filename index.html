@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>打开本地文件</title>
+    <script>
+        function handleFileSelect(event) {
+            var files = event.target.files; // 获取选择的文件数组
+            var file = files[0]; // 获取第一个文件
+            var reader = new FileReader();
+            // 执行你想要的处理操作
+            console.log("选择的文件名: " + file.name);
+            console.log("文件类型: " + file.type);
+            console.log("文件大小: " + file.size + " bytes");
+
+            reader.onload = function (e) {
+                var arrayBuffer = e.target.result;
+                // 创建一个Uint8Array来存储文件内容
+                var uintArray = new Uint8Array(arrayBuffer);
+
+                var jbig2 = new Jbig2Image();
+                var data = jbig2.parse(uintArray);
+          
+                var canvas = document.createElement('canvas');
+                canvas.width = jbig2.width;
+                canvas.height = jbig2.height;
+                var ctx = canvas.getContext('2d');
+                
+                var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                var data1 = imageData.data;
+
+                for (var i = 0,d=0; i < data1.length; i += 4,d++) {
+                     
+                    let sdata = data[d]
+                    if (sdata == 255) {
+                        // 修改像素的颜色或透明度等
+                        data1[i] = 255; // 红色通道（0-255）
+                        data1[i + 1] = 255;   // 绿色通道（0-255）
+                        data1[i + 2] = 255;   // 蓝色通道（0-255）
+                    } else {  // 修改像素的颜色或透明度等
+                        data1[i] = 0; // 红色通道（0-255）
+                        data1[i + 1] = 0;   // 绿色通道（0-255）
+                        data1[i + 2] = 0;   // 蓝色通道（0-255）
+                    }
+                    data1[i + 3] = 255; // Alpha 通道（0-255）
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+                document.body.appendChild(canvas);
+            }
+            reader.readAsArrayBuffer(file);
+        }
+    </script>
+</head>
+
+<body>
+    <input type="file" onchange="handleFileSelect(event)">
+</body>
+
+ 
+<script src="jbig2.js"></script>
+
+
+</html>
