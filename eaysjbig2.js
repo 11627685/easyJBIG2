@@ -2618,6 +2618,69 @@ class Jbig2Image {
 window.Jbig2Image = Jbig2Image;
 
 
+export function jb2Image(blob, imageType) {
+
+    return new Promise((resolve, reject) => {
+
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            var arrayBuffer = e.target.result;
+            // 创建一个Uint8Array来存储文件内容
+            var uintArray = new Uint8Array(arrayBuffer);
+            var jbig2 = new Jbig2Image();
+            var data = jbig2.parse(uintArray);
+
+
+            var canvas = document.createElement('canvas');
+            canvas.width = jbig2.width;
+            canvas.height = jbig2.height;
+            var ctx = canvas.getContext('2d');
+
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var data1 = imageData.data;
+            for (var i = 0, d = 0; i < data1.length; i += 4, d++) {
+                let sdata = data[d]
+                if (sdata == 255) {
+                    // 修改像素的颜色或透明度等
+                    data1[i] = 255; // 红色通道（0-255）
+                    data1[i + 1] = 255;   // 绿色通道（0-255）
+                    data1[i + 2] = 255;   // 蓝色通道（0-255）
+                } else {  // 修改像素的颜色或透明度等
+                    data1[i] = 0; // 红色通道（0-255）
+                    data1[i + 1] = 0;   // 绿色通道（0-255）
+                    data1[i + 2] = 0;   // 蓝色通道（0-255）
+                }
+                data1[i + 3] = 255; // Alpha 通道（0-255）
+            }
+            ctx.putImageData(imageData, 0, 0);
+
+            let dataURL = canvas.toDataURL("image/" + imageType);
+            // 创建Image对象
+            var img = new Image();
+            // 监听图像加载完成事件
+            img.onload = function () {
+                // 图像加载完成后，将Promise状态置为已完成
+                resolve(img);
+            };
+            // 监听图像加载错误事件
+            img.onerror = function (ee) {
+                // 图像加载错误时，将Promise状态置为已拒绝
+                reject(new Error("Failed to load image"));
+            };
+            // 为Image对象设置src为blob URL
+            img.src = dataURL;
+
+        }
+        reader.readAsArrayBuffer(blob);
+    });
+
+};
+
+
+// 导出函数到全局作用域
+window.jb2Image = jb2Image;
+
+
 // Table C-2
 const QeTable = [
   { qe: 0x5601, nmps: 1, nlps: 1, switchFlag: 1 },
