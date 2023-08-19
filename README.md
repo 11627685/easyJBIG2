@@ -19,7 +19,7 @@ an easy JBIG2 file web show
   （3）"./arithmetic_decoder.js";  
   （4）jbig2.js
 
-# 三、使用方法
+# 三、html中使用
    在index.html中，尝试打开一个jb2文件格式并把他展示到canvas上。  
 ```html   
  <!DOCTYPE html>
@@ -90,7 +90,72 @@ an easy JBIG2 file web show
 
  
    ```
-# 四、结果展示
+# 四、vue中使用
+
+  ```html
+     npm i jb2
+   ```
+   ```html
+ 
+<template>
+  <div class="hello">
+    <h1>{{ msg }}</h1>
+    <input type="file" @change="handleFileSelect">
+    <img v-bind:src="imageSrc" />
+  </div>
+</template>
+
+<script>
+import { jb2Image } from "jb2"
+
+export default {
+  name: 'HelloWorld',
+  data() {
+    return {
+      msg: 'Welcome to Your Vue.js App',
+      imageSrc: ''
+    }
+  },
+  methods: {
+    handleFileSelect(event) {
+      var files = event.target.files; // 获取选择的文件数组
+      var file = files[0]; // 获取第一个文件
+      var jb2 =  jb2Image(file,'png');
+      jb2.then((image) => {
+        this.imageSrc = image.src;
+      });
+
+    }
+  }
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h1,
+h2 {
+  font-weight: normal;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #42b983;
+}</style>
+
+ 
+   ```
+
+
+# 五、结果展示
   ![image](https://github.com/11627685/easyJBIG2show/blob/main/easyJBIG2.png)
    ![image](https://img-blog.csdnimg.cn/a4223792c9994904a9d57624c6460380.png)
 
